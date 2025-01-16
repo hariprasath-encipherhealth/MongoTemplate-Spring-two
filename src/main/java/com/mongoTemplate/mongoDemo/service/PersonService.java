@@ -61,7 +61,7 @@ public class PersonService {
 
         if(city != null && !city.isEmpty())
         {
-            criteria.add(Criteria.where("address.city").is(city));
+            criteria.add(Criteria.where("addresses.city").is(city));
         }
 
         //this and operator is used to combine multiple criterias into one single criteria and
