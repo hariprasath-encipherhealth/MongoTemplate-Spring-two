@@ -70,4 +70,10 @@ public class PersonController {
         return personService.getPopulationCount();
 
     }
+
+    @GetMapping("/multiLayerSort")
+    public List<Person> sort()
+    {
+        return personService.multiSort();
+    }
 }

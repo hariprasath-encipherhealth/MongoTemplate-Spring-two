@@ -64,7 +64,7 @@ public class PersonService {
             criteria.add(Criteria.where("addresses.city").is(city));
         }
 
-        //this and operator is used to combine multiple criterias into one single criteria and
+        //this and operator is used to combine multiple criteria into one single criteria and
         //checks for all matching or not
         //the toArray is used to convert the list of criteria to an array the new Criteria[0]
         //is passed to say that this the list need to be converted into an array of this type
@@ -120,5 +120,16 @@ public class PersonService {
         );
 
         return mongoTemplate.aggregate(aggregation,Person.class,CityPopulationDTO.class).getMappedResults();
+    }
+
+    public List<Person> multiSort()
+    {
+        Aggregation aggregation = Aggregation.newAggregation(
+                Aggregation.sort(Sort.Direction.DESC,"age","name")
+        );
+
+        AggregationResults<Person> aggregationResults = mongoTemplate.aggregate(aggregation,Person.class,Person.class);
+
+        return aggregationResults.getMappedResults();
     }
 }
