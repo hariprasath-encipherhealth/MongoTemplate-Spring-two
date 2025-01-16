@@ -1,6 +1,8 @@
 package com.mongoTemplate.mongoDemo.controller;
 
 
+import com.mongoTemplate.mongoDemo.collection.CityPopulationDTO;
+import com.mongoTemplate.mongoDemo.collection.OldestDTO;
 import com.mongoTemplate.mongoDemo.collection.Person;
 import com.mongoTemplate.mongoDemo.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,13 +59,13 @@ public class PersonController {
     }
 
     @GetMapping("/oldestPerson")
-    public List<Person> findOldest()
+    public List<OldestDTO> findOldest()
     {
         return personService.findOldest();
     }
 
     @GetMapping("/getPopulationCount")
-    public List<Person> getPopulation()
+    public List<CityPopulationDTO> getPopulation()
     {
         return personService.getPopulationCount();
 

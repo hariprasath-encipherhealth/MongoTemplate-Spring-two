@@ -1,6 +1,8 @@
 package com.mongoTemplate.mongoDemo.service;
 
 
+import com.mongoTemplate.mongoDemo.collection.CityPopulationDTO;
+import com.mongoTemplate.mongoDemo.collection.OldestDTO;
 import com.mongoTemplate.mongoDemo.collection.Person;
 import com.mongoTemplate.mongoDemo.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,34 +80,16 @@ public class PersonService {
                 return people;
     }
 
-    public List<Person> findOldest() {
-
-        UnwindOperation unwindOperation = Aggregation.unwind("address");
-        SortOperation sortOperation = Aggregation.sort(Sort.Direction.DESC,"age");
-
-        GroupOperation groupOperation = Aggregation.group("addresses.city");
-
-        Aggregation aggregation = Aggregation.newAggregation(
-                unwindOperation,
-                sortOperation,
-                groupOperation
-        );
-
-        AggregationResults<Person> answer = mongoTemplate.aggregate(aggregation,Person.class,Person.class);
-        System.out.println(answer.getRawResults());
-        return  answer.getMappedResults();
-    }
-
-    public List<Person> getPopulationCount() {
+    public List<OldestDTO> findOldest() {
 
         UnwindOperation unwindOperation = Aggregation.unwind("addresses");
+        SortOperation sortOperation = Aggregation.sort(Sort.Direction.DESC,"age");
 
         GroupOperation groupOperation = Aggregation.group("addresses.city")
-                .count().as("PopulationCount");
-
-        SortOperation sortOperation = Aggregation.sort(Sort.Direction.DESC,"PopulationCount");
-
-        ProjectionOperation projectionOperation = Aggregation.project("addresses.city","PopulationCount");
+                .max("age").as("age");;
+        ProjectionOperation projectionOperation = Aggregation.project()
+                .and("_id").as("city")
+                .and("age").as("oldestAge");
         Aggregation aggregation = Aggregation.newAggregation(
                 unwindOperation,
                 sortOperation,
@@ -113,6 +97,28 @@ public class PersonService {
                 projectionOperation
         );
 
-        return mongoTemplate.aggregate(aggregation,Person.class,Person.class).getMappedResults();
+        AggregationResults<OldestDTO> answer = mongoTemplate.aggregate(aggregation,Person.class,OldestDTO.class);
+        return  answer.getMappedResults();
+    }
+
+    public List<CityPopulationDTO> getPopulationCount() {
+
+        UnwindOperation unwindOperation = Aggregation.unwind("addresses");
+
+        GroupOperation groupOperation = Aggregation.group("addresses.city")
+                .count().as("population");
+
+        SortOperation sortOperation = Aggregation.sort(Sort.Direction.DESC,"population");
+
+        ProjectionOperation projectionOperation = Aggregation.project().and("_id").as("city")
+                .and("population").as("population");
+        Aggregation aggregation = Aggregation.newAggregation(
+                unwindOperation,
+                groupOperation,
+                sortOperation,
+                projectionOperation
+        );
+
+        return mongoTemplate.aggregate(aggregation,Person.class,CityPopulationDTO.class).getMappedResults();
     }
 }
