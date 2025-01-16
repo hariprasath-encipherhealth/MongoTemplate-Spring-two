@@ -109,7 +109,8 @@ public class PersonService {
         Aggregation aggregation = Aggregation.newAggregation(
                 unwindOperation,
                 sortOperation,
-                groupOperation
+                groupOperation,
+                projectionOperation
         );
 
         return mongoTemplate.aggregate(aggregation,Person.class,Person.class).getMappedResults();
