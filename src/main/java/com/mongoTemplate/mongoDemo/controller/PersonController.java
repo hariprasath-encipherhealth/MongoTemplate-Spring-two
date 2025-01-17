@@ -2,8 +2,10 @@ package com.mongoTemplate.mongoDemo.controller;
 
 
 import com.mongoTemplate.mongoDemo.collection.CityPopulationDTO;
+import com.mongoTemplate.mongoDemo.collection.Names;
 import com.mongoTemplate.mongoDemo.collection.OldestDTO;
 import com.mongoTemplate.mongoDemo.collection.Person;
+import com.mongoTemplate.mongoDemo.service.NameService;
 import com.mongoTemplate.mongoDemo.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,6 +21,8 @@ public class PersonController {
 
     @Autowired
     private PersonService personService;
+    @Autowired
+    private NameService nameService;
 
     @PostMapping("/save")
     public String savePerson(@RequestBody Person person)
@@ -92,4 +96,15 @@ public class PersonController {
     {
         return personService.regexTaskOne(name);
     }
+
+    @GetMapping("/regexFilterTaskTwo")
+    public List<Names> regexTaskTwo(
+            @RequestParam(required = false) String firstName,
+            @RequestParam(required = false) String middleName,
+            @RequestParam(required = false) String lastName)
+
+    {
+        return nameService.regexTaskTwo(firstName,middleName,lastName);
+    }
+
 }
