@@ -82,4 +82,9 @@ public class PersonController {
     {
         return personService.findByRegex();
     }
+    @GetMapping("/regexFilterTwo")
+    public List<Person> regexTwo()
+    {
+        return personService.regexSearch();
+    }
 }

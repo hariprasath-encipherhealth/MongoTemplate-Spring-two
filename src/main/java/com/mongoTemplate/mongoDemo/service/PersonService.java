@@ -147,4 +147,14 @@ public class PersonService {
 
         return results.getMappedResults();
     }
+
+    public List<Person> regexSearch()
+    {
+        Pattern pattern = Pattern.compile("^tamilnadu$");
+        Query query = new Query();
+        query.addCriteria(Criteria.where("addresses.city").regex(pattern));
+        List<Person> answer = mongoTemplate.find(query,Person.class);
+        System.out.println(answer.size());
+        return answer;
+    }
 }
