@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 @Service
 public class PersonService {
@@ -131,5 +132,18 @@ public class PersonService {
         AggregationResults<Person> aggregationResults = mongoTemplate.aggregate(aggregation,Person.class,Person.class);
 
         return aggregationResults.getMappedResults();
+    }
+
+    public List<Person> findByRegex() {
+
+        Pattern pattern = Pattern.compile("Ha");
+        Aggregation aggregation = Aggregation.newAggregation(
+
+                Aggregation.match(Criteria.where("name").regex(pattern))
+        );
+
+        AggregationResults<Person> results = mongoTemplate.aggregate(aggregation,Person.class,Person.class);
+
+        return results.getMappedResults();
     }
 }

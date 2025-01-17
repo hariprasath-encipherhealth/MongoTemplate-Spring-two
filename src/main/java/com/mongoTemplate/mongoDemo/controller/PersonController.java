@@ -76,4 +76,10 @@ public class PersonController {
     {
         return personService.multiSort();
     }
+
+    @GetMapping("/regexFilter")
+    public List<Person> regex()
+    {
+        return personService.findByRegex();
+    }
 }
