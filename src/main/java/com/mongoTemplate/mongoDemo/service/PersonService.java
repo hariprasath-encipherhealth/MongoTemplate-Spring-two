@@ -136,7 +136,8 @@ public class PersonService {
 
     public List<Person> findByRegex() {
 
-        Pattern pattern = Pattern.compile("Ha");
+        //this is used to create a regular expression and add some global parameters like case inSensitive
+        Pattern pattern = Pattern.compile("^Ha",Pattern.CASE_INSENSITIVE);
         Aggregation aggregation = Aggregation.newAggregation(
 
                 Aggregation.match(Criteria.where("name").regex(pattern))
