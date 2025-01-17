@@ -157,4 +157,20 @@ public class PersonService {
         System.out.println(answer.size());
         return answer;
     }
+
+    public List<Person> regexTaskOne(String name)
+    {
+        //when we define the pattern like this it will try to match the occurrences
+        //of the pattern in the name in the db
+        Pattern pattern = Pattern.compile(name);
+
+        Query query = new Query();
+        query.addCriteria(Criteria.where("name").regex(pattern));
+
+
+        List<Person> person = mongoTemplate.find(query,Person.class);
+        return person;
+
+    }
+
 }

@@ -87,4 +87,9 @@ public class PersonController {
     {
         return personService.regexSearch();
     }
+    @GetMapping("/regexFilter/{name}")
+    public List<Person> regexTaskOne(@PathVariable String name)
+    {
+        return personService.regexTaskOne(name);
+    }
 }
