@@ -78,6 +78,9 @@ public class NameService {
             }
         }
 
+        //if the input is rav k uh
+        //the output regex will be (rav)|(K)|(uh) - which searches for any of the patterns in the field
+
         //now we construct a regex pattern out of this
         Pattern pattern = Pattern.compile(regex,Pattern.CASE_INSENSITIVE);
 
