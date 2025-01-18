@@ -1,10 +1,7 @@
 package com.mongoTemplate.mongoDemo.controller;
 
 
-import com.mongoTemplate.mongoDemo.collection.CityPopulationDTO;
-import com.mongoTemplate.mongoDemo.collection.Names;
-import com.mongoTemplate.mongoDemo.collection.OldestDTO;
-import com.mongoTemplate.mongoDemo.collection.Person;
+import com.mongoTemplate.mongoDemo.collection.*;
 import com.mongoTemplate.mongoDemo.service.NameService;
 import com.mongoTemplate.mongoDemo.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,6 +102,12 @@ public class PersonController {
 
     {
         return nameService.regexTaskTwo(firstName,middleName,lastName);
+    }
+
+    @GetMapping("/fullNameSearch")
+    public List<Names> fullNameSearch(@RequestParam String input)
+    {
+        return nameService.fullNameSearch(input);
     }
 
 }

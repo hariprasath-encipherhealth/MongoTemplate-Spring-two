@@ -1,13 +1,19 @@
 package com.mongoTemplate.mongoDemo.service;
 
+import com.mongoTemplate.mongoDemo.collection.FullName;
 import com.mongoTemplate.mongoDemo.collection.Names;
+import com.mongoTemplate.mongoDemo.collection.Person;
+import org.apache.el.lang.ExpressionBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.*;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.expression.Expression;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -47,6 +53,44 @@ public class NameService {
             //create a query and pass it to them
             query.addCriteria(new Criteria().andOperator(criteria.toArray(new Criteria[0])));
         }
+
+        return mongoTemplate.find(query,Names.class);
+    }
+
+    public List<Names> fullNameSearch(String input) {
+
+
+        //this method here converts the input into regex
+        //to this pattern
+        // ()|()|() - this pattern converts the given input string into an or operator regex according to the array length
+        //it checks for any of the conditions
+        String [] array = input.split("\\s");
+        String regex = "";
+        for (int i = 0; i < array.length; i++)
+        {
+            if(i == array.length - 1)
+            {
+                regex = regex + "("+array[i]+")";
+            }
+            else
+            {
+                regex = regex + "("+array[i]+")|";
+            }
+        }
+
+        //now we construct a regex pattern out of this
+        Pattern pattern = Pattern.compile(regex,Pattern.CASE_INSENSITIVE);
+
+        //we specify the criteria list for each field
+
+        List<Criteria> criteria = new ArrayList<>();
+        criteria.add(Criteria.where("firstName").regex(pattern));
+        criteria.add(Criteria.where("middleName").regex(pattern));
+        criteria.add(Criteria.where("lastName").regex(pattern));
+
+        //now we specify the query and we specify the and operator for the criteria
+        Query query = new Query();
+        query.addCriteria(new Criteria().andOperator(criteria.toArray(criteria.toArray(new Criteria[0]))));
 
         return mongoTemplate.find(query,Names.class);
     }
