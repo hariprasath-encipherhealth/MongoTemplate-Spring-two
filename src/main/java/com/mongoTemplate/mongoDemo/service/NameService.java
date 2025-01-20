@@ -65,24 +65,27 @@ public class NameService {
         // ()|()|() - this pattern converts the given input string into an or operator regex according to the array length
         //it checks for any of the conditions
         String [] array = input.split("\\s");
-        String regex = "";
+
+        StringBuilder regex = new StringBuilder();
+
         for (int i = 0; i < array.length; i++)
         {
             if(i == array.length - 1)
             {
-                regex = regex + "("+array[i]+")";
+                regex.append('(').append(array[i]).append(')');
             }
             else
             {
-                regex = regex + "("+array[i]+")|";
+                regex.append('(').append(array[i]).append(')').append('|');
             }
         }
 
+        String sbRegex = regex.toString();
         //if the input is rav k uh
         //the output regex will be (rav)|(K)|(uh) - which searches for any of the patterns in the field
 
         //now we construct a regex pattern out of this
-        Pattern pattern = Pattern.compile(regex,Pattern.CASE_INSENSITIVE);
+        Pattern pattern = Pattern.compile(sbRegex,Pattern.CASE_INSENSITIVE);
 
         //we specify the criteria list for each field
 
