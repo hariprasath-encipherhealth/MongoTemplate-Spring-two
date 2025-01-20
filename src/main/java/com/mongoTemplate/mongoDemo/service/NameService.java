@@ -65,30 +65,25 @@ public class NameService {
         // ()|()|() - this pattern converts the given input string into an or operator regex according to the array length
         //it checks for any of the conditions
         String [] array = input.split("\\s");
-
-        StringBuilder regex = new StringBuilder();
-
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < array.length; i++)
         {
             if(i == array.length - 1)
             {
-                regex.append('(').append(array[i]).append(')');
+                sb.append('(').append(array[i]).append(')');
             }
             else
             {
-                regex.append('(').append(array[i]).append(')').append('|');
+                sb.append('(').append(array[i]).append(')').append('|');
             }
         }
 
-        String sbRegex = regex.toString();
+        String sbRegex = sb.toString();
         //if the input is rav k uh
-        //the output regex will be (rav)|(K)|(uh) - which searches for any of the patterns in the field
-
+        //the output regex will be(rav)|(K)|(uh)
         //now we construct a regex pattern out of this
         Pattern pattern = Pattern.compile(sbRegex,Pattern.CASE_INSENSITIVE);
-
         //we specify the criteria list for each field
-
         List<Criteria> criteria = new ArrayList<>();
         criteria.add(Criteria.where("firstName").regex(pattern));
         criteria.add(Criteria.where("middleName").regex(pattern));
@@ -96,7 +91,7 @@ public class NameService {
 
         //now we specify the query and we specify the and operator for the criteria
         Query query = new Query();
-        query.addCriteria(new Criteria().andOperator(criteria.toArray(criteria.toArray(new Criteria[0]))));
+        query.addCriteria(new Criteria().orOperator(criteria.toArray(criteria.toArray(new Criteria[0]))));
 
         return mongoTemplate.find(query,Names.class);
     }
