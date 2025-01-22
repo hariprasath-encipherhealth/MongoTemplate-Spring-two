@@ -79,18 +79,61 @@ public class NameService {
         }
 
         String sbRegex = sb.toString();
+        System.out.println(sbRegex);
         //if the input is rav k uh
         //the output regex will be(rav)|(K)|(uh)
         //now we construct a regex pattern out of this
         Pattern pattern = Pattern.compile(sbRegex,Pattern.CASE_INSENSITIVE);
         //we specify the criteria list for each field
         List<Criteria> criteria = new ArrayList<>();
-        criteria.add(Criteria.where("firstName").regex(pattern));
-        criteria.add(Criteria.where("middleName").regex(pattern));
-        criteria.add(Criteria.where("lastName").regex(pattern));
+
+
+
+        //firstName
+        if(array.length == 1) {
+            criteria.add(Criteria.where("firstName").regex(pattern));
+            //middleName
+            criteria.add(Criteria.where("middleName").regex(pattern));
+            //lastName
+            criteria.add(Criteria.where("lastName").regex(pattern));
+        }
+
+        if(array.length == 2)
+        {
+            //firstName and middleName
+            criteria.add(new Criteria().andOperator(
+                    Criteria.where("firstName").regex(pattern),
+            Criteria.where("middleName").regex(pattern)));
+
+
+            //middleName and lastName
+            criteria.add(new Criteria().andOperator(
+                    Criteria.where("middleName").regex(pattern),
+                    Criteria.where("lastName").regex(pattern)
+            ));
+
+
+            //firstName and lastName
+            criteria.add(new Criteria().andOperator(
+
+                    Criteria.where("firstName").regex(pattern),
+                    Criteria.where("lastName").regex(pattern)
+            ));
+        }
+
+        //all fields
+        if(array.length == 3) {
+            criteria.add(new Criteria().andOperator(
+                    Criteria.where("firstName").regex(pattern),
+                    Criteria.where("middleName").regex(pattern),
+                    Criteria.where("lastName").regex(pattern)
+            ));
+        }
+
 
         //now we specify the query and we specify the and operator for the criteria
         Query query = new Query();
+
         query.addCriteria(new Criteria().orOperator(criteria.toArray(criteria.toArray(new Criteria[0]))));
 
         return mongoTemplate.find(query,Names.class);

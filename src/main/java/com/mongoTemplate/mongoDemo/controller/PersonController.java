@@ -2,6 +2,8 @@ package com.mongoTemplate.mongoDemo.controller;
 
 
 import com.mongoTemplate.mongoDemo.collection.*;
+import com.mongoTemplate.mongoDemo.service.CriteriaListServiceCombination;
+import com.mongoTemplate.mongoDemo.service.CriteriaListServicePermutation;
 import com.mongoTemplate.mongoDemo.service.NameService;
 import com.mongoTemplate.mongoDemo.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,10 @@ public class PersonController {
     private PersonService personService;
     @Autowired
     private NameService nameService;
+    @Autowired
+    private CriteriaListServicePermutation criteriaListServicePermutation;
+    @Autowired
+    private CriteriaListServiceCombination criteriaListServiceCombination;
 
     @PostMapping("/save")
     public String savePerson(@RequestBody Person person)
@@ -108,6 +114,24 @@ public class PersonController {
     public List<Names> fullNameSearch(@RequestParam String input)
     {
         return nameService.fullNameSearch(input);
+    }
+
+    @GetMapping("/get-full-criteria-permutation")
+    public List<Names> fullCriteriaService(@RequestBody List<String> fieldName, @RequestParam String input)
+    {
+        return criteriaListServicePermutation.fullNameSearch(fieldName,input);
+    }
+
+    @GetMapping("/get-full-criteria-combination")
+    public List<Names> fullCriteriaServiceCombination(@RequestBody List<String> fieldName, @RequestParam String input)
+    {
+        return criteriaListServiceCombination.fullNameSearch(fieldName,input);
+    }
+
+    @GetMapping("/get-criteria")
+    public List<Names> getCriteria(@RequestParam String input)
+    {
+        return criteriaListServiceCombination.getCriteria(input);
     }
 
 }
