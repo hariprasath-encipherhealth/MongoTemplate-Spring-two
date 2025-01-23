@@ -167,4 +167,5 @@ public class InputService {
 
         return new Criteria().andOperator(criteria.toArray(criteria.toArray(new Criteria[0])));
     }
+
 }
