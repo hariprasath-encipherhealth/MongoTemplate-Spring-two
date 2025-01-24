@@ -20,10 +20,6 @@ public class NewLogicService {
     MongoTemplate mongoTemplate;
     public List<Names> newLogic(String input) {
 
-        if(input.isEmpty())
-        {
-            return null;
-        }
         List<String> fieldNames = Arrays.asList("firstName","middleName","lastName");
 
         Criteria criteria = newLogicCriteria(input,fieldNames);
@@ -60,7 +56,7 @@ public class NewLogicService {
 
 
     public static Criteria newLogicCriteria(String input, List<String> fieldNames) {
-        String[] inputArray = input.split("\\s+");
+        String[] inputArray = input.trim().split("\\s+");
 
         List<Criteria> criteria = new ArrayList<>();
 
